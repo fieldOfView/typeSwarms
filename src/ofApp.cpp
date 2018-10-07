@@ -142,10 +142,14 @@ void ofApp::writeShape2() {
 			int count = 0;
 			myStroke.clear();	// clear it out
 
+			const vector<ofPolyline> outlines = testChar.getOutline();
+			if (outlines.size() == 0) {
+				continue;
+			}
 			for (int k = 0; k < 1; k++) {  // only do outside...
-				vector<ofPoint> outsidePoints = testChar.getOutline()[0].getVertices();
+				vector<ofPoint> outsidePoints = outlines[k].getVertices();
 				if (outsidePoints.size() == 0) {
-					break;
+					continue;
 				}
 				//cout << testChar.contours[k].pts.size();
 
@@ -167,6 +171,9 @@ void ofApp::writeShape2() {
 
 			}
 
+			if (myStroke.getLength() == 0) {
+				continue;
+			}
 
 			myStroke.resample(resampleSize);  // resample so that we are now 100 points exactly....
 
@@ -201,10 +208,6 @@ void ofApp::writeShape2() {
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-	ofEnableAlphaBlending();
-	ofSetColor(0,130,130, 200);
-	ofSetColor(0x000000);
-
 	for (int i = 0; i < particles.size(); i++){
 		particles[i].draw();
 	}
@@ -213,25 +216,20 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed  (int key){
-
-	if(key) {
+	
+	if(key <= 255) {
 		Wrd.push_back(char(key));
 		activateDraw = true;
-		//cout << Wrd;
 	}
 
 	if(key == OF_KEY_RETURN)  {
 		Wrd = "";
 		activateDraw = false;
-		//cout << Wrd;
 	}
 	if(key == OF_KEY_BACKSPACE)  {
 		Wrd = "";
 		activateDraw = false;
-		//
 	}
-
-
 
 }
 
