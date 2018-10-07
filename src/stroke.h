@@ -8,7 +8,7 @@ class stroke {
 	
 	public:
 		
-		void	addPoint(float x, float y);
+		void	addPoint(ofVec2f point);
 		void	clear();
 		void	draw();
 		float	getLength();

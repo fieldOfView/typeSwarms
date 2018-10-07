@@ -6,10 +6,6 @@ class ofApp : public ofBaseApp{
 
 public:
 
-	bool activateDraw;
-	bool activateLoop;
-
-
 	void setup();
 	void update();
 	void draw();
@@ -19,33 +15,20 @@ public:
 
 	void writeShape();
 
-
-	void writeShape2();
-
 	void mouseMoved(int x, int y );
 	void mouseDragged(int x, int y, int button);
 	void mousePressed(int x, int y, int button);
 	void mouseReleased();
 
-	stroke	myStroke;
+	bool activateDraw;
 
-	// let's make a vector of them
+	stroke	path;
+
 	vector <particle> particles;
-	string Wrd;
+	string word;
 
-	bool	bRepel;
-	float	radius;
 	float	strength;
 
-
-	ofTrueTypeFont testFont;
-
-	bool bCircle;
-
-	int ptsx;
-	int ptsy;
-
-	int letter;
-
+	ofTrueTypeFont font;
 };
 

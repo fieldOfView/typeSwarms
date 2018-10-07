@@ -1,8 +1,8 @@
 #include "stroke.h"
 
 
-void stroke::addPoint(float x, float y){
-	pts.push_back(ofVec2f(x,y));
+void stroke::addPoint(ofVec2f point){
+	pts.push_back(ofVec2f(point));
 }
 
 void stroke::clear(){
