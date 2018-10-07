@@ -2,7 +2,7 @@
 
 
 void stroke::addPoint(float x, float y){
-	pts.push_back(ofxVec2f(x,y));
+	pts.push_back(ofVec2f(x,y));
 }
 
 void stroke::clear(){
@@ -38,19 +38,19 @@ void stroke::resample(int newNumPts){
 	
 	float D = 0.0;									// total distance, as we walk across
 	
-	vector <ofxVec2f> newPts;						// new pts
+	vector <ofVec2f> newPts;						// new pts
  
 	//--- store first point since we'll never resample it out of existence
 	newPts.push_back(pts.front());
 	for(int i = 1; i < (int)pts.size(); i++){
 		
-		ofxVec2f currentPoint  = pts[i];
-		ofxVec2f previousPoint = pts[i-1];
+		ofVec2f currentPoint  = pts[i];
+		ofVec2f previousPoint = pts[i-1];
 		float d = (previousPoint - currentPoint).length();
 		if ((D + d) >= interval){
 			float qx = previousPoint.x + ((interval - D) / d) * (currentPoint.x - previousPoint.x);
 			float qy = previousPoint.y + ((interval - D) / d) * (currentPoint.y - previousPoint.y);
-			ofxVec2f point(qx, qy);
+			ofVec2f point(qx, qy);
 			newPts.push_back(point);
 			pts.insert(pts.begin() + i, point);
 			D = 0.0;

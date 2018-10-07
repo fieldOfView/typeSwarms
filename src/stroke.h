@@ -3,8 +3,6 @@
 
 #include "ofMain.h"
 
-#include "ofxVectorMath.h"
-
 
 class stroke {
 	
@@ -16,8 +14,7 @@ class stroke {
 		float	getLength();
 		void	resample(int newNumPts);
 		
-		vector <ofxVec2f> pts;
-
+		vector <ofVec2f> pts;
 };
 
 #endif

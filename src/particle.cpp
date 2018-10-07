@@ -44,12 +44,12 @@ void particle::addRepulsionForce(float x, float y, float radius, float scale){
     
 	// ----------- (1) make a vector of where this position is: 
 	
-	ofxVec2f posOfForce;
+	ofVec2f posOfForce;
 	posOfForce.set(x,y);
 	
 	// ----------- (2) calculate the difference & length 
 	
-	ofxVec2f diff	= pos - posOfForce;
+	ofVec2f diff	= pos - posOfForce;
 	float length	= diff.length();
 	
 	// ----------- (3) check close enough
@@ -76,12 +76,12 @@ void particle::addAttractionForce(float x, float y, float radius, float scale){
     
 	// ----------- (1) make a vector of where this position is: 
 	
-	ofxVec2f posOfForce;
+	ofVec2f posOfForce;
 	posOfForce.set(x,y);
 	
 	// ----------- (2) calculate the difference & length 
 	
-	ofxVec2f diff	= pos - posOfForce;
+	ofVec2f diff	= pos - posOfForce;
 	float length	= diff.length();
 	
 	// ----------- (3) check close enough
@@ -107,12 +107,12 @@ void particle::addAttractionForce(float x, float y, float radius, float scale){
 void particle::addRepulsionForce(particle &p, float radius, float scale){
 	
 	// ----------- (1) make a vector of where this particle p is: 
-	ofxVec2f posOfForce;
+	ofVec2f posOfForce;
 	posOfForce.set(p.pos.x,p.pos.y);
 	
 	// ----------- (2) calculate the difference & length 
 	
-	ofxVec2f diff	= pos - posOfForce;
+	ofVec2f diff	= pos - posOfForce;
 	float length	= diff.length();
 	
 	// ----------- (3) check close enough
@@ -140,12 +140,12 @@ void particle::addRepulsionForce(particle &p, float radius, float scale){
 void particle::addAttractionForce(particle & p, float radius, float scale){
 	
 	// ----------- (1) make a vector of where this particle p is: 
-	ofxVec2f posOfForce;
+	ofVec2f posOfForce;
 	posOfForce.set(p.pos.x,p.pos.y);
 	
 	// ----------- (2) calculate the difference & length 
 	
-	ofxVec2f diff	= pos - posOfForce;
+	ofVec2f diff	= pos - posOfForce;
 	float length	= diff.length();
 	
 	// ----------- (3) check close enough
@@ -174,12 +174,12 @@ void particle::addAttractionForce(particle & p, float radius, float scale){
 void particle::addClockwiseForce(particle &p, float radius, float scale){
 	
 	// ----------- (1) make a vector of where this particle p is: 
-	ofxVec2f posOfForce;
+	ofVec2f posOfForce;
 	posOfForce.set(p.pos.x,p.pos.y);
 	
 	// ----------- (2) calculate the difference & length 
 	
-	ofxVec2f diff	= pos - posOfForce;
+	ofVec2f diff	= pos - posOfForce;
 	float length	= diff.length();
 	
 	// ----------- (3) check close enough
@@ -207,12 +207,12 @@ void particle::addClockwiseForce(particle &p, float radius, float scale){
 void particle::addCounterClockwiseForce(particle &p, float radius, float scale){
 	
 	// ----------- (1) make a vector of where this particle p is: 
-	ofxVec2f posOfForce;
+	ofVec2f posOfForce;
 	posOfForce.set(p.pos.x,p.pos.y);
 	
 	// ----------- (2) calculate the difference & length 
 	
-	ofxVec2f diff	= pos - posOfForce;
+	ofVec2f diff	= pos - posOfForce;
 	float length	= diff.length();
 	
 	// ----------- (3) check close enough
@@ -241,7 +241,7 @@ void particle::addCounterClockwiseForce(particle &p, float radius, float scale){
 //------------------------------------------------------------
 void particle::addForFlocking(particle &p){
 	
-	ofxVec3f diff, diffNormalized;
+	ofVec3f diff, diffNormalized;
 	float distance;
 	
 	diff			= p.pos - pos;
@@ -333,10 +333,10 @@ void particle::draw(){
 	ofFill();
 	ofCircle(pos.x, pos.y, 2);
 	
-	ofxVec2f velNormal = vel;
+	ofVec2f velNormal = vel;
 	velNormal.normalize();
 	
-	ofxVec2f velPerp;
+	ofVec2f velPerp;
 	velPerp.x = -velNormal.y;
 	velPerp.y = velNormal.x;
 	

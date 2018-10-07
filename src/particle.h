@@ -2,13 +2,12 @@
 #define PARTICLE_H
 
 #include "ofMain.h"
-#include "ofxVectorMath.h"
 
 
 
 typedef struct{
 	int			count;
-	ofxVec2f	sum;
+	ofVec2f	sum;
 	float		distance;
 	float		strength;
 } flockingForce;
@@ -18,9 +17,9 @@ typedef struct{
 class particle{
 
 	public:
-        ofxVec2f pos;
-        ofxVec2f vel;
-        ofxVec2f frc;   // frc is also know as acceleration (newton says "f=ma")
+        ofVec2f pos;
+        ofVec2f vel;
+        ofVec2f frc;   // frc is also know as acceleration (newton says "f=ma")
 			
         particle();
 		virtual ~particle(){};
