@@ -1,41 +1,42 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup(){
+void ofApp::setup() {
 
 	//	ofEnableSmoothing();
 
-	ofBackground(0,0,0);
+	ofBackground(0, 0, 0);
 	font.loadFont("helvetica.ttf", 300, true, true, true);
 
 	ofSetVerticalSync(true);
 	ofSetFrameRate(60);
 
 	// instatiates the class particle and send them to their positions
-	for (int i = 0; i <400; i++){
+	for (int i = 0; i < 400; i++) {
 
 		particle myParticle;
-		myParticle.setInitialCondition(ofRandom(0,ofGetWidth()),ofRandom(0,ofGetHeight()),0,0);
+		myParticle.setInitialCondition(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight()), 0, 0);
 		particles.push_back(myParticle);
 
 	}
 
 	// define repel and radius
-	strength	= 0.5f;
+	strength = 0.5f;
+	radius = 600;
 
 	activateDraw = false;
 }
 
 //--------------------------------------------------------------
-void ofApp::update(){
+void ofApp::update() {
 
-	for (int i = 0; i < particles.size(); i++){
+	for (int i = 0; i < particles.size(); i++) {
 		particles[i].resetForce();
 	}
 
-	for (int i = 0; i < particles.size(); i++){
-		for (int j = 0; j < particles.size(); j++){
-			if (i != j){
+	for (int i = 0; i < particles.size(); i++) {
+		for (int j = 0; j < particles.size(); j++) {
+			if (i != j) {
 				particles[i].addForFlocking(particles[j]);
 			}
 		}
@@ -43,7 +44,7 @@ void ofApp::update(){
 		particles[i].addRepulsionForce(mouseX, mouseY, 150, 0.4);
 	}
 
-	for (int i = 0; i < particles.size(); i++){
+	for (int i = 0; i < particles.size(); i++) {
 		particles[i].addFlockingForce();
 		particles[i].addDampingForce();
 		particles[i].bounceOffWalls();
@@ -60,8 +61,11 @@ void ofApp::writeShape() {
 	if (!activateDraw)
 		return;
 
-	int widthStep = 0;	
+	int widthStep = 0;
 	int nLetters = word.length();
+	if (nLetters == 0) {
+		return;
+	}
 
 	// create a temporary array of stroke objects.  this would be better not made temporary...
 	int resampleSize = particles.size() / (float)nLetters;
@@ -71,18 +75,21 @@ void ofApp::writeShape() {
 		ofTTFCharacter character;
 		character = font.getCharacterAsPoints(word[m]);
 
-		string Str = "";
-		Str.push_back(word[m]);
-
-		float widthOfCharacter = font.getStringBoundingBox(Str, 0,0).width;
-
 		path.clear();	// clear it out
+		ofRectangle characterBoundingBox;
 
 		const vector<ofPolyline> outlines = character.getOutline();
 		if (outlines.size() == 0) {
 			continue;
 		}
 		for (int k = 0; k < 1; k++) {  // only do outside...
+			if (k == 0) {
+				characterBoundingBox = outlines[k].getBoundingBox();
+			}
+			else {
+				characterBoundingBox = characterBoundingBox.getUnion(outlines[k].getBoundingBox());
+			}
+
 			vector<ofPoint> outsidePoints = outlines[k].getVertices();
 			if (outsidePoints.size() == 0) {
 				continue;
@@ -101,13 +108,13 @@ void ofApp::writeShape() {
 		path.resample(resampleSize);  // resample so that we are now 100 points exactly....
 
 		for (int i = 0; i < path.pts.size(); i++){
-			particles[particleCounter].addAttractionForce( path.pts[i].x + ofGetWidth()/8 + widthStep ,  path.pts[i].y + ofGetHeight()/2 - font.getStringBoundingBox(Str, 0,0).height/2 + 300 , 600, strength);
+			particles[particleCounter].addAttractionForce( path.pts[i].x + ofGetWidth()/8 + widthStep ,  path.pts[i].y + ofGetHeight()/2 - characterBoundingBox.height/2 + 300 , radius, strength);
 
 			particles[particleCounter].update();
 			particleCounter ++;
 		}
 
-		widthStep += widthOfCharacter;
+		widthStep += characterBoundingBox.width;
 
 	}
 

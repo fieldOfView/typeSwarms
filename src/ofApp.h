@@ -22,12 +22,13 @@ public:
 
 	bool activateDraw;
 
-	stroke	path;
+	stroke path;
 
 	vector <particle> particles;
 	string word;
 
-	float	strength;
+	float strength;
+	float radius;
 
 	ofTrueTypeFont font;
 };
