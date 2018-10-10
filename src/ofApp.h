@@ -23,11 +23,13 @@ public:
 
 
 	vector <ofPoint> points;
+	ofRectangle boundingBox;
 	vector <particle> particles;
 	string word;
 
 	float strength;
 	float radius;
+	int margin;
 
 	ofTrueTypeFont font;
 };

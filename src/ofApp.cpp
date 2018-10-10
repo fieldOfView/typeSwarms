@@ -23,6 +23,7 @@ void ofApp::setup() {
 	// define repel and radius
 	strength = 0.5f;
 	radius = 600;
+	margin = 20;
 
 	activateDraw = false;
 }
@@ -54,13 +55,17 @@ void ofApp::update() {
 	if (!activateDraw)
 		return;
 
-	int particleCounter = 0;
+	double scale = (ofGetWidth() - 2 * margin) / (double)boundingBox.width;
+	double offset = (ofGetHeight() + (boundingBox.getHeight() * scale)) / 2.;
 
 	for (int i = 0; i < min(points.size(), particles.size()); i++) {
-		particles[particleCounter].addAttractionForce(points[i].x + ofGetWidth() / 8, points[i].y + ofGetHeight() / 2, radius, strength);
+		particles[i].addAttractionForce(
+			(points[i].x - boundingBox.getLeft()) * scale + margin, 
+			(points[i].y - boundingBox.getBottom()) * scale + offset, 
+			radius, strength
+		);
 
-		particles[particleCounter].update();
-		particleCounter++;
+		particles[i].update();
 	}
 
 }
@@ -69,7 +74,10 @@ void ofApp::update() {
 void ofApp::writeShape() {
 	points.clear();
 
+	boundingBox = font.getStringBoundingBox(word, 0, 0);
+
 	double totalLength = 0;
+
 	vector<ofTTFCharacter> characters = font.getStringAsPoints(word);
 	for (int m = 0; m < characters.size(); m++) {
 		vector<ofPolyline> outlines = characters[m].getOutline();
