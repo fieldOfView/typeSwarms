@@ -1,6 +1,5 @@
 #include "ofMain.h"
 #include "particle.h"
-#include "stroke.h"
 
 class ofApp : public ofBaseApp{
 
@@ -22,8 +21,8 @@ public:
 
 	bool activateDraw;
 
-	stroke path;
 
+	vector <ofPoint> points;
 	vector <particle> particles;
 	string word;
 

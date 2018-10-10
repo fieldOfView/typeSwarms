@@ -51,73 +51,41 @@ void ofApp::update() {
 		particles[i].update();
 	}
 
-	writeShape();
+	if (!activateDraw)
+		return;
+
+	int particleCounter = 0;
+
+	for (int i = 0; i < min(points.size(), particles.size()); i++) {
+		particles[particleCounter].addAttractionForce(points[i].x + ofGetWidth() / 8, points[i].y + ofGetHeight() / 2, radius, strength);
+
+		particles[particleCounter].update();
+		particleCounter++;
+	}
 
 }
 
 
 void ofApp::writeShape() {
+	points.clear();
 
-	if (!activateDraw)
-		return;
-
-	int widthStep = 0;
-	int nLetters = word.length();
-	if (nLetters == 0) {
-		return;
+	double totalLength = 0;
+	vector<ofTTFCharacter> characters = font.getStringAsPoints(word);
+	for (int m = 0; m < characters.size(); m++) {
+		vector<ofPolyline> outlines = characters[m].getOutline();
+		for (int n = 0; n < outlines.size(); n++) {
+			totalLength += outlines[n].getLengthAtIndex(outlines[n].getIndexAtPercent(100));
+		}
 	}
 
-	// create a temporary array of stroke objects.  this would be better not made temporary...
-	int resampleSize = particles.size() / (float)nLetters;
-	int particleCounter = 0;
-
-	for (int m = 0; m < nLetters; m++){
-		ofTTFCharacter character;
-		character = font.getCharacterAsPoints(word[m]);
-
-		path.clear();	// clear it out
-		ofRectangle characterBoundingBox;
-
-		const vector<ofPolyline> outlines = character.getOutline();
-		if (outlines.size() == 0) {
-			continue;
+	double spacing = totalLength / 400.;
+	for (int m = 0; m < characters.size(); m++) {
+		vector<ofPolyline> outlines = characters[m].getOutline();
+		for (int n = 0; n < outlines.size(); n++) {
+			vector<ofPoint> resampled = outlines[n].getResampledBySpacing(spacing).getVertices();
+			points.insert(points.end(), resampled.begin(), resampled.end());
 		}
-		for (int k = 0; k < 1; k++) {  // only do outside...
-			if (k == 0) {
-				characterBoundingBox = outlines[k].getBoundingBox();
-			}
-			else {
-				characterBoundingBox = characterBoundingBox.getUnion(outlines[k].getBoundingBox());
-			}
-
-			vector<ofPoint> outsidePoints = outlines[k].getVertices();
-			if (outsidePoints.size() == 0) {
-				continue;
-			}
-
-			for(int i = 0; i < outsidePoints.size(); i++){
-				path.addPoint(outsidePoints[i]);	// add into the stroke object
-			}
-			path.addPoint(outsidePoints[0]);	   /// add point 0 again (to close the shape)
-		}
-
-		if (path.getLength() == 0) {
-			continue;
-		}
-
-		path.resample(resampleSize);  // resample so that we are now 100 points exactly....
-
-		for (int i = 0; i < path.pts.size(); i++){
-			particles[particleCounter].addAttractionForce( path.pts[i].x + ofGetWidth()/8 + widthStep ,  path.pts[i].y + ofGetHeight()/2 - characterBoundingBox.height/2 + 300 , radius, strength);
-
-			particles[particleCounter].update();
-			particleCounter ++;
-		}
-
-		widthStep += characterBoundingBox.width;
-
 	}
-
 }
 
 
@@ -136,6 +104,7 @@ void ofApp::keyPressed  (int key){
 	if(key <= 255) {
 		word.push_back(char(key));
 		activateDraw = true;
+		writeShape();
 	}
 
 	if(key == OF_KEY_RETURN)  {
@@ -145,6 +114,7 @@ void ofApp::keyPressed  (int key){
 	if(key == OF_KEY_BACKSPACE)  {
 		if (word.size() > 1) {
 			word.erase(word.size() - 2);
+			writeShape();
 		}
 		else {
 			word = "";
