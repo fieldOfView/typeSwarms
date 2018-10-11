@@ -82,7 +82,8 @@ void ofApp::writeShape() {
 	for (int m = 0; m < characters.size(); m++) {
 		vector<ofPolyline> outlines = characters[m].getOutline();
 		for (int n = 0; n < outlines.size(); n++) {
-			totalLength += outlines[n].getLengthAtIndex(outlines[n].getIndexAtPercent(100));
+			ofPolyline outline = outlines[n];
+			totalLength += outline.getLengthAtIndex(outline.size() - 1);
 		}
 	}
 
@@ -109,24 +110,28 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::keyPressed  (int key){
 	
-	if(key <= 255) {
-		word.push_back(char(key));
-		activateDraw = true;
-		writeShape();
-	}
-
-	if(key == OF_KEY_RETURN)  {
+	switch (key) {
+	case OF_KEY_RETURN:
 		word = "";
 		activateDraw = false;
-	}
-	if(key == OF_KEY_BACKSPACE)  {
+		break;
+
+	case OF_KEY_BACKSPACE:
 		if (word.size() > 1) {
-			word.erase(word.size() - 2);
+			word.erase(word.size() - 1);
 			writeShape();
 		}
 		else {
 			word = "";
 			activateDraw = false;
+		}
+		break;
+
+	default:
+		if (key <= 255) {
+			word.push_back(char(key));
+			activateDraw = true;
+			writeShape();
 		}
 	}
 
